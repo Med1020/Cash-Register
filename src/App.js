@@ -14,14 +14,19 @@ function App() {
     if (bill > 0) {
       payment = Number(payment);
       bill = Number(bill);
-      if (payment > bill) {
+      if (payment >= bill) {
         let returnChange = payment - bill;
         setOutput(returnChange);
         calculateChange(returnChange);
+        setError("");
       } else {
+        setOutput("");
+        setChange([]);
         setError("You need to take more money!");
       }
     } else {
+      setOutput("");
+      setChange([]);
       setError("Invalid bill amount");
     }
   };
@@ -46,7 +51,11 @@ function App() {
           type="text"
           value={bill}
           onChange={(e) => {
-            setBill(e.target.value);
+            if (e.target.value > 0) {
+              setBill(e.target.value);
+            } else {
+              setChange([]);
+            }
           }}
           placeholder="Enter bill amount here"
           autoComplete="off"
@@ -59,7 +68,9 @@ function App() {
           id="cash-given"
           type="text"
           value={payment}
-          onChange={(e) => setPayment(e.target.value)}
+          onChange={(e) => {
+            setPayment(e.target.value);
+          }}
           placeholder="Enter the cash paid"
           autoComplete="off"
           disabled={!enabled}
